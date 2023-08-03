@@ -2,19 +2,22 @@ const express = require("express");
 const { chats } = require("./data/data");
 const dotEnv = require("dotenv");
 const cors = require("cors");
-const connectDB = require('./config/db');
+const connectDB = require("./config/db");
 const colors = require("colors");
+const userRoutes = require("./routes/userRoutes");
 
 dotEnv.config();
 
 connectDB();
 const app = express();
+app.use(express.json()); //to accept json data by server
 app.use(cors());
 
 app.get("/route", (req, res) => {
   res.send("api is running");
 });
 
+app.use("/api/user", userRoutes);
 app.get("/api/chat", (req, res) => {
   if (req.query.id) {
     console.log(req.query.id);
