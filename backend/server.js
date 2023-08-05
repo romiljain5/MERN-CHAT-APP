@@ -5,6 +5,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const colors = require("colors");
 const userRoutes = require("./routes/userRoutes");
+const { errorHandler, notFound } = require("./middleware/errorMiddleware");
 
 dotEnv.config();
 
@@ -27,5 +28,7 @@ app.get("/api/chat", (req, res) => {
   res.send(chats);
 });
 
+app.use(notFound);
+app.use(errorHandler);
 const port = process.env.PORT || 40001;
 app.listen(port, console.log(`Server started on port ${port}`.yellow.bold));
