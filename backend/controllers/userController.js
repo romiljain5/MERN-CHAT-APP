@@ -53,4 +53,22 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser, authUser };
+// /api/user?searc=piyush
+const allUsers = asyncHandler(async (req, res) => {
+  const keyword = req.query.search
+    ? {
+        /** mogodb or and regex operator, search for email or name return whichever satisfies
+    https://www.mongodb.com/docs/manual/reference/operator/query/regex/ - regex
+    https://www.mongodb.com/docs/manual/reference/operator/query/or/ - or operator 
+    **/
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+  const users = await User.find(keyword)//.find({ _id: { $ne: req.user._id } }); //search for other user except logged in ones
+  res.send(users);
+});
+
+module.exports = { registerUser, authUser, allUsers };
