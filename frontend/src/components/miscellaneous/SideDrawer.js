@@ -17,6 +17,7 @@ import {
   DrawerBody,
   Input,
   useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
@@ -33,7 +34,7 @@ const SideDrawer = () => {
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState();
 
-  const { user } = ChatState();
+  const { user, setSelectedChat, chats, setChats } = ChatState();
   const toast = useToast();
 
   const navigate = useNavigate();
@@ -78,8 +79,32 @@ const SideDrawer = () => {
     }
   };
 
-  const accessChat = (userId) => {
-    
+  const accessChat = async (userId) => {
+    try {
+    //   setLoading(true);
+      setLoadingChat(true);
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.post("api/chat", { userId }, config);
+      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
+      setLoadingChat(false);
+      setSelectedChat(data);
+      onClose();
+    } catch (error) {
+      toast({
+        title: "Error fetching the chat",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
   };
   return (
     <>
@@ -157,6 +182,7 @@ const SideDrawer = () => {
                 />
               ))
             )}
+            {loadingChat && <Spinner ml="auto" display="flex" color='blue.500'/>}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

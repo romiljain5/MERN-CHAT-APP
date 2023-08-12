@@ -8,3 +8,16 @@
     color: black;
     background-image: url("https://cdn.dribbble.com/users/1162077/screenshots/4318436/media/1e17490dd92ca27c4a6274ab7bff5b11.png");
 }
+
+::-webkit-scrollbar{
+    width: 0px;
+}
+
+::-webkit-scrollbar-thumb{
+    background: rgba(136,136,136,0.281);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover{
+    background: #555;
+}
