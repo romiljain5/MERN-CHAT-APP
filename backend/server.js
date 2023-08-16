@@ -7,6 +7,7 @@ const colors = require("colors");
 const userRoutes = require("./routes/userRoutes");
 const { errorHandler, notFound } = require("./middleware/errorMiddleware");
 const chatRoutes = require("./routes/chatRoutes");
+const messageRoutes = require("./routes/messageRoutes");
 
 dotEnv.config();
 
@@ -29,6 +30,8 @@ app.use("/api/user", userRoutes);
 //   res.send(chats);
 // });
 app.use("/api/chat", chatRoutes);
+app.use("/api/message", messageRoutes);
+
 
 app.use(notFound);
 app.use(errorHandler);
